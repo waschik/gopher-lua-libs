@@ -56,9 +56,9 @@ go get github.com/vadv/gopher-lua-libs
 
 For the quick overview you can use standalone interpreter with listed libs. Examples and documentation for modules can be found in their directories.
 ```
-go get github.com/vadv/gopher-lua-libs/cmd/glua-libs
+go install github.com/vadv/gopher-lua-libs/cmd/glua-libs@latest
 
-$ glua-libs example.lua
+glua-libs example.lua
 ```
 
 This example shows basic usage of this libs in your code
@@ -84,6 +84,7 @@ var (
 func main() {
         flag.Parse()
         state := lua.NewState()
+        defer state.Close()
         libs.Preload(state)
         if *exec != `` {
                 if err := state.DoFile(*exec); err != nil {
