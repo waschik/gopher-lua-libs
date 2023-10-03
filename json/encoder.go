@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	jsonEncoderType = "json.Encoder"
+	jsonEncoderTypePlain = "Encoder"
+	jsonEncoderType      = "json." + jsonEncoderTypePlain
 )
 
 func CheckJSONEncoder(L *lua.LState, n int) *json.Encoder {
@@ -58,9 +59,9 @@ func jsonEncoderSetEscapeHTML(L *lua.LState) int {
 	return 0
 }
 
-func registerJSONEncoder(L *lua.LState) {
+func registerJSONEncoder(L *lua.LState, modul *lua.LTable) {
 	mt := L.NewTypeMetatable(jsonEncoderType)
-	L.SetGlobal(jsonEncoderType, mt)
+	modul.RawSetString(jsonEncoderTypePlain, mt)
 	L.SetField(mt, "__index", L.SetFuncs(L.NewTable(), map[string]lua.LGFunction{
 		"encode":          jsonEncoderEncode,
 		"set_indent":      jsonEncoderSetIndent,

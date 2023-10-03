@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	jsonDecoderType = "json.Decoder"
+	jsonDecoderTypePlain = "Decoder"
+	jsonDecoderType      = "json." + jsonDecoderTypePlain
 )
 
 func CheckJSONDecoder(L *lua.LState, n int) *json.Decoder {
@@ -53,9 +54,9 @@ func jsonDecoderMore(L *lua.LState) int {
 	return 1
 }
 
-func registerDecoder(L *lua.LState) {
+func registerDecoder(L *lua.LState, module *lua.LTable) {
 	mt := L.NewTypeMetatable(jsonDecoderType)
-	L.SetGlobal(jsonDecoderType, mt)
+	L.SetField(module, jsonDecoderTypePlain, mt)
 	L.SetField(mt, "__index", L.SetFuncs(L.NewTable(), map[string]lua.LGFunction{
 		"decode":       jsonDecoderDecode,
 		"input_offset": jsonDecoderInputOffset,
